@@ -23,8 +23,8 @@ import com.unboundid.ldif.LDIFReader;
 import io.yupiik.fusion.framework.api.lifecycle.Start;
 import io.yupiik.fusion.framework.api.scope.ApplicationScoped;
 import io.yupiik.fusion.framework.build.api.event.OnEvent;
+import io.yupiik.fusion.framework.build.api.lifecycle.Destroy;
 import io.yupiik.fusion.framework.build.api.order.Order;
-import jakarta.annotation.PreDestroy;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -105,7 +105,7 @@ public class EmbeddedLdapServer {
         }
     }
 
-    @PreDestroy
+    @Destroy
     public void release() {
         if (server == null) {
             return;
