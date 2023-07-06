@@ -1,0 +1,6 @@
+{
+  "com.yupiik.meecrogate.ldap.server": {
+    "provisioning": true,
+    "setSystemProperties": true
+  }
+}
