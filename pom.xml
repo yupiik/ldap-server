@@ -36,7 +36,7 @@
     <fusion.version>1.0.31</fusion.version>
     <arthur.version>1.0.8</arthur.version>
     <unboundid-ldapsdk.version>6.0.7</unboundid-ldapsdk.version>
-    <junit.version>5.10.0-M1</junit.version>
+    <junit.version>5.13.4</junit.version>
   </properties>
 
   <dependencies>
