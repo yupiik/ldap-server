@@ -32,9 +32,9 @@
 
     <main.class>io.yupiik.fusion.framework.api.main.Launcher</main.class>
 
-    <yupiik-logging.version>1.0.7</yupiik-logging.version>
-    <fusion.version>1.0.4</fusion.version>
-    <arthur.version>1.0.6</arthur.version>
+    <yupiik-logging.version>1.0.8</yupiik-logging.version>
+    <fusion.version>1.0.31</fusion.version>
+    <arthur.version>1.0.8</arthur.version>
     <unboundid-ldapsdk.version>6.0.7</unboundid-ldapsdk.version>
     <junit.version>5.10.0-M1</junit.version>
   </properties>
