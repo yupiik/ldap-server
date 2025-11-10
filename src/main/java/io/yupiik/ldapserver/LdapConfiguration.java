@@ -23,7 +23,7 @@ public record LdapConfiguration(
         @Property(value = "active", documentation = "Activate the server", defaultValue = "true")
         boolean active,
 
-        @Property(value = "setSystemProperties", documentation = "Activate the server", defaultValue = "false")
+        @Property(value = "setSystemProperties", documentation = "Use system properties", defaultValue = "true")
         boolean setSystemProperties,
 
         @Property(value = "host", documentation = "Published host of the server", defaultValue = "\"localhost\"")
@@ -32,12 +32,15 @@ public record LdapConfiguration(
         @Property(value = "port", documentation = "Published port of the server", defaultValue = "4444")
         int port,
 
-        @Property(value = "provisioning", documentation = "Activate the server", defaultValue = "true")
+        @Property(value = "provisioning", documentation = "Initialisation the server with data source", defaultValue = "false")
         boolean provisioning,
 
-        @Property(value = "provisioningSource", documentation = "Activate the server", defaultValue = "\"yupiik/ldap/server/default.ldif\"")
+        @Property(value = "provisioningSource", documentation = "Source of the initialisation data file")
         String provisioningSource,
 
-        @Property(value = "active", documentation = "Activate the server", defaultValue = "\"dc=demo,dc=com\"")
+        @Property(value = "schemaSource", documentation = "Source of the initialisation schema file")
+        String schemaSource,
+
+        @Property(value = "baseDn", documentation = "Base DN")
         String baseDn) {
 }

@@ -1,34 +1,42 @@
-dn: dc=demo,dc=com
+dn: dc=yupiik,dc=io
 objectClass: domain
 objectClass: top
-dc: demo
+dc: yupiik
 
-dn: ou=Users,dc=demo,dc=com
+dn: ou=Users,dc=yupiik,dc=io
 objectClass: organizationalUnit
 objectClass: top
 ou: Users
 
-dn: ou=Groups,dc=demo,dc=com
+dn: ou=Groups,dc=yupiik,dc=io
 objectClass: organizationalUnit
 objectClass: top
 ou: Groups
 
-dn: cn=admin,ou=Users,dc=demo,dc=com
+dn: cn=admin,ou=Users,dc=yupiik,dc=io
+objectClass: inetuser
 objectClass: inetOrgPerson
 objectClass: organizationalPerson
 objectClass: person
 objectClass: top
+objectClass: uidObject
 cn: admin
 sn: admin
 uid: admin
 userPassword: admin
+inetUserStatus: Active
+mail: admin@infinite.org
 
-dn: cn=Buzz Lightyear,ou=Users,dc=demo,dc=com
+dn: cn=Buzz Lightyear,ou=Users,dc=yupiik,dc=io
+objectClass: inetuser
 objectClass: inetOrgPerson
 objectClass: organizationalPerson
 objectClass: person
 objectClass: top
+objectClass: uidObject
 cn: Buzz Lightyear
 sn: Lightyear
 uid: blightyear
 userPassword: infinite
+inetUserStatus: Active
+mail: buzz.lightyear@infinite.org

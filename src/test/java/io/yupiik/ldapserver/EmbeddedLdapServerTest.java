@@ -46,7 +46,7 @@ class EmbeddedLdapServerTest {
         try (final LDAPConnection ldapConnection = new LDAPConnection(
                     connectionOptions, "localhost", Integer.parseInt(portValue))) {
             final SearchResult search = ldapConnection.search(new SearchRequest(
-                    "dc=demo,dc=com", SearchScope.BASE, "(dc=demo)"));
+                    "dc=yupiik,dc=io", SearchScope.BASE, "(dc=yupiik)"));
             assertEquals(ResultCode.SUCCESS, search.getResultCode());
             assertEquals(1, search.getEntryCount());
         } catch (final LDAPException e) {

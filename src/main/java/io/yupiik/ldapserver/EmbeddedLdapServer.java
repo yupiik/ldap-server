@@ -19,6 +19,8 @@ import com.unboundid.ldap.listener.InMemoryDirectoryServer;
 import com.unboundid.ldap.listener.InMemoryDirectoryServerConfig;
 import com.unboundid.ldap.listener.InMemoryListenerConfig;
 import com.unboundid.ldap.sdk.LDAPException;
+import com.unboundid.ldap.sdk.schema.Schema;
+import com.unboundid.ldif.LDIFException;
 import com.unboundid.ldif.LDIFReader;
 import io.yupiik.fusion.framework.api.lifecycle.Start;
 import io.yupiik.fusion.framework.api.scope.ApplicationScoped;
@@ -36,6 +38,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -57,9 +60,12 @@ public class EmbeddedLdapServer {
 
 
     public void onEvent(@OnEvent @Order(10) final Start start) {
+
         if (!ldapConfiguration.active()) {
+            logger.info("LDAP server not active");
             return;
         }
+        logger.info("Starting embedded LDAP server");
         try {
             final InMemoryDirectoryServer ldapServer = createServer(ldapConfiguration);
             if (ldapConfiguration.provisioning()) {
@@ -100,8 +106,10 @@ public class EmbeddedLdapServer {
                 resetSystemProperty = true;
             }
             server = ldapServer;
-        } catch (final LDAPException e) {
+        } catch (final LDAPException | LDIFException | IOException e) {
             throw new IllegalStateException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -143,7 +151,8 @@ public class EmbeddedLdapServer {
                 });
     }
 
-    private InMemoryDirectoryServer createServer(final LdapConfiguration configuration) throws LDAPException {
+    private InMemoryDirectoryServer createServer(final LdapConfiguration configuration) throws Exception {
+        logger.info(configuration.toString());
         final InMemoryDirectoryServerConfig cfg = new InMemoryDirectoryServerConfig(ldapConfiguration.baseDn().split("\\|"));
         Optional.of(ldapConfiguration.port())
                 .filter(i -> i > 0)
@@ -168,6 +177,22 @@ public class EmbeddedLdapServer {
                         throw new IllegalStateException(e);
                     }
                 });
+
+        // user defined embedded common schemas and custom if set in the configuration, otherise we are using the standard embedded from unboundid-ldapsdk
+        if (ldapConfiguration.provisioning() && ldapConfiguration.schemaSource() != null) {
+            Schema coreSchema = Schema.getSchema(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("schemas/00-core.ldif")));
+            Schema cosineSchema = Schema.getSchema(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("schemas/01-cosine.ldif")));
+            Schema inetorgpersonSchema = Schema.getSchema(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("schemas/02-inetorgperson.ldif")));
+            Path customSchemaPath = Path.of(ldapConfiguration.schemaSource());
+            if (!Files.isRegularFile(customSchemaPath)) throw new IllegalStateException("Custom schema file not found");
+            Schema customSchema = Schema.getSchema(Files.newInputStream(customSchemaPath));
+            Schema merged = Schema.mergeSchemas(coreSchema, cosineSchema, inetorgpersonSchema, customSchema);
+
+            cfg.setSchema(merged);
+            cfg.setEnforceAttributeSyntaxCompliance(true);
+            cfg.setEnforceSingleStructuralObjectClass(true);
+        }
+
         return new InMemoryDirectoryServer(cfg);
     }
 }
