@@ -32,6 +32,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <main.class>io.yupiik.fusion.framework.api.main.Launcher</main.class>
+        <image.base>ossyupiik/java:21.0.8@sha256:f24ddb2bd8bf94e4f7f7fafb7a668689ba557dd28cc7a2c63ecd1bf9710cce90</image.base>
+        <image.registry>ossyupiik</image.registry>
+        <image.name>${image.registry}/${project.artifactId}:${project.version}</image.name>
+        <image.workdir>/opt/ldap-server</image.workdir>
 
         <yupiik-logging.version>1.0.8</yupiik-logging.version>
         <fusion.version>1.0.31</fusion.version>
@@ -343,7 +347,7 @@ under the License.
                 </configuration>
             </plugin>
             <!--
-                mvn package jib:dockerBuild -Ppostgres -DskipTests
+                mvn package jib:dockerBuild -DskipTests
             -->
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
@@ -386,14 +390,6 @@ under the License.
                             <com.realvat.cmd>docker run ${image.name} &lt;args&gt;</com.realvat.cmd>
                         </labels>
                     </container>
-                    <extraDirectories>
-                        <paths>
-                            <path>
-                                <from>${project.parent.basedir}/src/resources/yupiik/ldap/server</from>
-                                <into>${image.workdir}/ldap</into>
-                            </path>
-                        </paths>
-                    </extraDirectories>
                     <outputPaths>
                         <imageJson>${project.build.directory}/jib-image.json</imageJson>
                     </outputPaths>
